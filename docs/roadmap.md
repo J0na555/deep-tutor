@@ -16,7 +16,7 @@ Stack:
 - SQLite
 - Qwen3 8B
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # Phase 2 — Memory
 
@@ -26,7 +26,7 @@ Features:
 - session storage
 - learning profile
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # Phase 3 — Debugging System
 
@@ -35,7 +35,7 @@ Features:
 - debugging guidance
 - debugging modes
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # Phase 4 — Multi-Agent System
 
@@ -46,7 +46,7 @@ Agents:
 
 Add orchestrator routing.
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # Phase 5 — Project Awareness
 
@@ -55,7 +55,7 @@ Features:
 - architecture analysis
 - repeated pattern detection
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # Phase 6 — Adaptive Learning
 
@@ -65,7 +65,7 @@ Features:
 - personalized challenges
 - reflection system
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # Long-Term Vision
 
@@ -75,3 +75,25 @@ A local AI mentor that:
 - improves debugging skills
 - adapts to user weaknesses
 - helps users become independent developers
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# MVP Scope
+
+The MVP includes:
+- one mentor agent
+- local model integration
+- basic memory
+- hint levels
+- terminal/web chat UI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Post-MVP Features
+
+Later additions:
+- multi-agent routing
+- project awareness
+- adaptive learning
+- spaced repetition
+- semantic memory
