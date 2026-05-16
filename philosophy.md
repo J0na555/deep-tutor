@@ -1,60 +1,75 @@
 # Philosophy
 
-Deep Tutor is a serious engineering experiment: **improve how you think**, not how fast you can paste code. The system behaves like a patient senior developer, mentor, and debugging coach—not like autocomplete, a bulk code generator, or an instant-answer chatbot.
+Deep Tutor is a **serious engineering experiment** in **learning systems**, not a consumer AI product pitch. It exists to answer one question with discipline: **does this setup make you a clearer thinker over months?**
+
+**Core statement:** Deep Tutor is **a system designed to improve how developers think.**
+
+---
 
 ## What we optimize for
 
-- **Reasoning** over output volume  
-- **Debugging ability** over “works on my machine” luck  
-- **Conceptual models** over syntax memorization  
-- **Independent problem solving** over dependency on the model  
-- **Long-term growth** over session-by-session throughput  
+- **Learning** over convenience  
+- **Thinking** over autocomplete  
+- **Debugging** over dependency on the model  
+- **Guidance** over solution dumping  
+- **Growth** over speed  
 
-Teaching is **guided**. The orchestrator and prompts are biased toward questions, constraints, and escalating hints—not toward replacing your cognition.
+The terminal integration (OpenCode + local models) is there so the loop stays **close to real work**—not so you can maximize tokens per hour.
 
-## Non-negotiables (for builders and users)
+---
 
-1. **Learning over convenience** — If the fastest path is “copy this,” the system should resist until the learning case for disclosure is clear.  
-2. **Thinking over generation** — Code may appear at high hint levels or when pedagogy would otherwise collapse; the default is not full solutions.  
-3. **Debugging over dependency** — Errors and traces are treated as curriculum: hypothesize, narrow, reproduce, instrument.  
-4. **Reflection over memorization** — Mistakes and themes are recorded so you see patterns, not isolated incidents.  
-5. **Growth over speed** — Metrics focus on fewer repeated mistakes and calmer debugging—not on maximizing tokens per hour.  
+## What Deep Tutor must resist becoming
 
-## Anti-goals
+The design intentionally pushes back against:
 
-The system should **not** slide into:
+- **Passive autocomplete** — answers appearing without diagnosis  
+- **Answer machines** — completing homework or interviews without understanding  
+- **Shortcut tools** — replacing cognition when a smaller step would teach more  
 
-- A shortcut machine for homework or interviews without understanding  
-- Passive autocomplete for daily coding  
-- An authoritative oracle for production changes without human review  
-- A performance theater (“look how productive I am”) disconnected from real understanding  
+If you routinely fight the constraints and demand full solutions, the architecture stops helping: **the pedagogy lives in the constraint surface**, not in raw model horsepower.
 
-If you routinely override constraints and demand full solutions, the design stops working: **the power is in the constraint surface**, not in raw model capability.
+---
+
+## Non-negotiables
+
+1. **Learning over convenience** — If the fastest path is “paste this,” the system should resist until the case for disclosure is clear.  
+2. **Thinking over generation** — Code may appear at higher hint levels or when withholding collapses learning; the default is not wholesale solutions.  
+3. **Debugging over dependency** — Traces and errors are curriculum: hypothesize, narrow, reproduce, instrument.  
+4. **Reflection over memorization** — Mistakes and themes are recorded so patterns emerge across sessions.  
+5. **Growth over speed** — Prefer fewer repeated mistakes and calmer debugging over throughput theater.  
+
+---
 
 ## Honesty about limits
 
-- A local LLM is not magic; it can be wrong, overconfident, or narrow.  
-- Memory and routing are approximations; they need evaluation and iteration.  
-- **Target behavior** in docs may run ahead of what is implemented in this repo; the system design calls that out where relevant.  
+- A **local LLM** can be wrong, overconfident, or shallow on niche topics. **You** remain responsible for verification.  
+- **Memory and routing** are approximate; they need iteration and honest evaluation—not faith.  
+- Docs may describe **target behavior** ahead of code in this repo; see [System design](docs/system-design.md).  
+
+---
 
 ## Two places, one habit
 
-- **Deep Tutor project (engine)** — software: orchestrator, memory, prompts, integrations.  
-- **Leveling environment** — your personal growth workspace: domains, notes, application projects, reflections, devlogs.  
+- **Deep Tutor project** — Intelligence layer: orchestrator, prompts, memory, configs (this repository).  
+- **Leveling environment** — my **developer growth workspace**: domains of study, application projects, notes, reflections, devlogs.  
 
-Domains organize **what you are learning**. Projects are **where you apply it**. Keeping that distinction clear prevents “study” and “shipping” from collapsing into one undifferentiated pile.
+**Domains** organize **what i learn**. **Projects** organize **where i ship**. Keeping that split preserves sane mental models when the same keyword (e.g. “caching”) appears in theory drills and in production code.
+
+---
 
 ## Growth documentation (Git, devlogs, experiments)
 
-The culture around the tool matters:
+The culture around the tool is part of the system:
 
-- **Commits** — small, meaningful units that explain *why* a change exists.  
-- **Devlogs** — honest narrative: what you tried, what failed, what you learned.  
-- **Reflections** — short, regular synthesis; not performative essays.  
-- **Experiments** — bounded hypotheses, recorded outcomes, intentional abandonment when disproven.  
+- **Commits** — Explain *why*; avoid churn for graphs.  
+- **Devlogs** — What you tried, what failed, what you learned—without performance theater.  
+- **Reflections** — Short synthesis after hard sessions.  
+- **Experiments** — Bounded hypotheses; abandoning a bad idea is a successful outcome.  
 
-The goal is a truthful record of reasoning over time—not a polished personal brand.
+The goal is a **truthful record of reasoning over time**, not a personal brand kit.
+
+---
 
 ## Summary
 
-Deep Tutor is built for developers who want a **mentor-shaped** local layer: one entrypoint, explicit teaching posture, memory that accumulates, and a workspace that respects the difference between **learning** and **application**. If that sounds restrictive, it is: the restrictions are the pedagogy.
+Deep Tutor is for developers who want a **mentor-shaped layer** in the terminal: **OpenCode** (or equivalent) for execution, **Ollama** for local inference, and **Deep Tutor** for **teaching posture**, **memory**, and **domain-aware rules**. The stance is reflective, systems-oriented, and grounded—closer to a careful experiment than to “AGI tutor” marketing.

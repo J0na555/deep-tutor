@@ -1,9 +1,10 @@
-# Architecture (stub)
+# Architecture
 
-End-to-end architecture, lifecycle, and orchestrator overview:
+End-to-end shape of the stack:
 
-- [End-to-end architecture](system-design.md#4-end-to-end-architecture)
-- [Request lifecycle](system-design.md#5-request-lifecycle)
-- [Repository layout (intent)](system-design.md#3-repository-layout-intent)
+- [System flow](system-design.md#2-system-flow) — Leveling → Deep Tutor → OpenCode → Ollama  
+- [End-to-end architecture](system-design.md#6-end-to-end-architecture) — Sequence and responsibilities  
+- [Request lifecycle](system-design.md#7-request-lifecycle) — Phases from intake to memory write  
+- [Repository layouts](system-design.md#4-repository-layouts) — Engine vs leveling workspace  
 
 **Canonical blueprint:** [System design](system-design.md)

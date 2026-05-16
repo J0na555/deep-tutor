@@ -1,9 +1,11 @@
-# Agents (stub)
+# Agents
 
-Agent modes, boundaries, handoffs, and future backlog live in the canonical system design:
+In Deep Tutor, **“agents” are not autonomous AI systems**—especially in the MVP. They are **prompt modes**: packaged **teaching behaviors** and **reasoning stances** (mentor, debugging, concept explanation, …) that the orchestrator selects. You interact through **OpenCode**; you do not “call Agent B.”
 
-- [Agent system](system-design.md#7-agent-system)
-- [Orchestrator decision logic](system-design.md#6-orchestrator-decision-logic)
-- [Hint escalation](system-design.md#8-hint-escalation)
+**Canonical sections:**
+
+- [Teaching behaviors and prompt modes](system-design.md#9-teaching-behaviors-and-prompt-modes)
+- [Orchestrator](system-design.md#8-orchestrator)
+- [Hint escalation](system-design.md#10-hint-escalation)
 
 **Philosophy:** [Philosophy](../philosophy.md)

@@ -1,12 +1,63 @@
 # Deep Tutor
 
-Deep Tutor is a **local developer growth system**: an orchestrated teaching layer that prioritizes reasoning, debugging, and long-term learning over instant answers. It is designed to run as software you control (local LLM, local memory), with a strict separation between the **engine** (this repository) and your **leveling workspace** (where domains, notes, and application projects live).
+Deep Tutor is a **local developer intelligence layer**: orchestration, prompts, and lightweight memory that shape **how** you learn in the terminal. It is **not** a standalone chat app, a replacement IDE, or a code-generation product. It integrates with tools you already use—primarily **[OpenCode](https://opencode.ai)** in the terminal and **local models via Ollama** (e.g. Qwen / DeepSeek-class weights)—so the workflow stays **terminal-native** and **under your control**.
 
-- **[Philosophy](philosophy.md)** — non-negotiables, anti-goals, and how the system is meant to be used.
-- **[System design](docs/system-design.md)** — canonical blueprint: two environments, orchestration, agents, memory, lifecycle, guardrails, evaluation, MVP vs future.
+**One-line framing:** *A system designed to improve how developers think.*
 
-**Engine vs leveling:** This repo is the **Deep Tutor project** (orchestrator, agent modes, prompts, memory implementation, APIs). The **leveling environment** is a separate workspace (e.g. sibling directory `leveling-arc/`) where you structure learning domains, reflections, devlogs, and experiments. The orchestrator is intended to consume context from that workspace; details are in the system design document.
+---
 
-For day-to-day usage patterns (terminal session, folder context), see [Usage model](docs/USAGE_MODEL.md) (stub → [System design §15](docs/system-design.md#15-usage-and-session-model)).
+## Read next
 
-Development narratives belong in [devlogs/](devlogs/) and structured tries in [experiments/](experiments/).
+| Doc | What it covers |
+|-----|----------------|
+| [Philosophy](philosophy.md) | Learning over convenience; thinking over autocomplete; anti-goals |
+| [System design](docs/system-design.md) | Canonical blueprint: two environments, stack, orchestrator, memory, MVP |
+| [Usage model](docs/USAGE_MODEL.md) | Concrete workflows with OpenCode + leveling layout |
+
+---
+
+## Two environments (critical)
+
+1. **Deep Tutor project** — **This repository.** Prompt packs, orchestrator logic (target), memory (target), domain configs, scripts, experiments about pedagogy. It is primarily a **context and learning orchestration system**, not a backend monolith.
+
+2. **Leveling environment** — **Separate workspace** (e.g. sibling repo `leveling-arc/`): `domains/`, `projects/`, `notes/`, `reflections/`, `devlogs/`, `experiments/`. That is where **skill progression and reflection** live. Deep Tutor **operates inside** that layout via folder context and conventions—not inside a bespoke Deep Tutor UI.
+
+Details and diagrams: [System design §3](docs/system-design.md#3-two-environments).
+
+---
+
+## Intended stack
+
+```text
+Leveling environment → Deep Tutor context layer → OpenCode CLI → Local LLM (Ollama)
+```
+
+See [System design §2](docs/system-design.md#2-system-flow).
+
+---
+
+## Repo intent (target layout)
+
+```text
+deep-tutor/
+├── prompts/
+├── agents/           # Teaching behavior / prompt-mode specs—not autonomous “swarm” agents
+├── orchestrator/
+├── memory/
+├── domains/
+├── configs/
+├── scripts/
+├── experiments/
+├── docs/
+├── devlogs/
+├── philosophy.md
+└── README.md
+```
+
+Today this repo is mostly **documentation**; runtime pieces are described as **target** behavior in the system design.
+
+---
+
+## Culture
+
+Engineering narrative belongs in [devlogs/](devlogs/) and structured tries in [experiments/](experiments/). Honest devlogs beat polished hype—the same posture the tool teaches.

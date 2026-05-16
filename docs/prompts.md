@@ -1,9 +1,11 @@
-# Prompts (stub)
+# Prompts
 
-Teaching posture, hint policy, and guardrails:
+Prompts encode **teaching posture**, **hint ceilings**, and **refusal patterns**. They align with **prompt modes** (mentor / debug / concept) chosen by the orchestrator—not with user-facing “pick a bot.”
 
-- [Hint escalation](system-design.md#8-hint-escalation)
-- [Prompting and guardrails](system-design.md#11-prompting-and-guardrails)
-- [Agent system](system-design.md#7-agent-system)
+**Canonical sections:**
+
+- [Prompting and guardrails](system-design.md#13-prompting-and-guardrails)
+- [Hint escalation](system-design.md#10-hint-escalation)
+- [Teaching behaviors and prompt modes](system-design.md#9-teaching-behaviors-and-prompt-modes)
 
 **Canonical blueprint:** [System design](system-design.md)
