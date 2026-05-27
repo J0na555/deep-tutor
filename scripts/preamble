@@ -1,0 +1,94 @@
+#!/usr/bin/env python3
+"""Print an inspectable Deep Tutor preamble for the current cwd."""
+
+from __future__ import annotations
+
+import argparse
+import sys
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from orchestrator.assemble import assemble_preamble, default_mode_and_hint  # noqa: E402
+from orchestrator.bind import bind_context, repo_root_from_module  # noqa: E402
+
+
+def build_parser() -> argparse.ArgumentParser:
+    default_mode, default_hint = default_mode_and_hint(REPO_ROOT)
+
+    parser = argparse.ArgumentParser(
+        description="Emit an inspectable Deep Tutor preamble for OpenCode.",
+    )
+    parser.add_argument(
+        "--cwd",
+        type=Path,
+        default=None,
+        help="Directory to bind (default: process cwd)",
+    )
+    parser.add_argument(
+        "--domain",
+        metavar="KEY",
+        default=None,
+        help="Override domain key (e.g. dsa, system-design)",
+    )
+    parser.add_argument(
+        "--leveling-root",
+        metavar="PATH",
+        default=None,
+        help="Path to leveling workspace (overrides config and auto-detect)",
+    )
+    parser.add_argument(
+        "--mode",
+        choices=("mentor", "debug", "concept"),
+        default=default_mode,
+        help=f"Teaching mode prompt pack (default: {default_mode})",
+    )
+    parser.add_argument(
+        "--hint-level",
+        type=int,
+        choices=range(1, 6),
+        default=default_hint,
+        metavar="N",
+        help=f"Hint ceiling 1–5 (default: {default_hint})",
+    )
+    parser.add_argument(
+        "--binding-only",
+        action="store_true",
+        help="Print binding metadata only, not the full preamble",
+    )
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)
+    repo_root = repo_root_from_module()
+
+    binding = bind_context(
+        repo_root=repo_root,
+        cwd=args.cwd,
+        domain_flag=args.domain,
+        leveling_root_override=args.leveling_root,
+    )
+
+    if args.binding_only:
+        leveling = binding.leveling_root or "—"
+        print(f"cwd: {binding.cwd}")
+        print(f"leveling_root: {leveling}")
+        print(f"domain: {binding.domain} (source: {binding.domain_source})")
+        print(f"project: {binding.project or '—'}")
+        print(f"curated_context: {'yes' if binding.curated_context else 'no'}")
+        return 0
+
+    preamble = assemble_preamble(
+        binding,
+        mode=args.mode,
+        hint_level=args.hint_level,
+    )
+    sys.stdout.write(preamble.text)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
