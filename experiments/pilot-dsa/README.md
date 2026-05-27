@@ -32,7 +32,16 @@ cd ../leveling-arc/domains/dsa
 
 More turns on **invariants and complexity** than on copying a final program ([USAGE_MODEL](../../docs/USAGE_MODEL.md)).
 
+## Routing v1 (optional)
+
+Pass the user message so teach mode is selected automatically:
+
+```bash
+/path/to/deep-tutor/scripts/preamble -m "IndexError when i goes past len(a)-1"
+```
+
+Decisions append to `memory/data/routing.jsonl` for offline review ([system design §11.4](../../docs/system-design.md#114-update-triggers-examples)).
+
 ## What this pilot does not cover
 
 - OpenCode agent hook automation (paste preamble manually for MVP)
-- Routing v1 / teach-mode auto-selection (Phase 2)

@@ -54,7 +54,12 @@ deep-tutor/
 └── README.md
 ```
 
-Today this repo is mostly **documentation** plus a **minimal orchestrator and memory skeleton**; deeper routing and OpenCode integration remain **target** behavior in the system design.
+Today this repo is mostly **documentation** plus a **minimal orchestrator and memory skeleton**. **Routing v1** classifies utterances into teach modes (`mentor` / `debug` / `concept`) and logs decisions to `memory/data/routing.jsonl`; tighter OpenCode hook integration remains **target** behavior in the system design.
+
+```bash
+./scripts/route -m "IndexError on line 5 when I access nums[i]"
+./scripts/preamble -m "What is a deadlock?" --cwd ../leveling-arc/domains/backend
+```
 
 **DSA pilot (Workflow A):** sibling `leveling-arc/domains/dsa/` with `CONTEXT.md` — run `./scripts/pilot-dsa` to verify binding and preamble assembly; see [experiments/pilot-dsa](experiments/pilot-dsa/README.md).
 

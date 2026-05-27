@@ -2,5 +2,7 @@
   "leveling_root": null,
   "memory_db": null,
   "default_mode": "mentor",
-  "default_hint_level": 2
+  "default_hint_level": 2,
+  "routing_log": "memory/data/routing.jsonl",
+  "routing_log_enabled": true
 }

@@ -9,6 +9,8 @@ Default store: `memory/data/learning.sqlite` (gitignored). Override with `memory
 | Table | Purpose |
 |-------|---------|
 | `weak_concepts` | Concepts to revisit |
+
+**Routing log (v1):** teach-mode decisions append to `memory/data/routing.jsonl` (gitignored). Disable via `routing_log_enabled: false` in `configs/default.json` or `DEEP_TUTOR_ROUTING_LOG=0`.
 | `mistake_fingerprints` | Repeated errors (simple text keys, incrementing count) |
 | `solved_topics` | Topics not to over-drill |
 | `frustration_cues` | Session-level struggle signals |

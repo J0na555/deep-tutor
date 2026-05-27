@@ -13,6 +13,11 @@ if str(REPO_ROOT) not in sys.path:
 
 from orchestrator.assemble import assemble_preamble, default_mode_and_hint  # noqa: E402
 from orchestrator.bind import bind_context, repo_root_from_module  # noqa: E402
+from orchestrator.routing import (  # noqa: E402
+    format_routing_summary,
+    log_routing_decision,
+    route,
+)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -40,10 +45,16 @@ def build_parser() -> argparse.ArgumentParser:
         help="Path to leveling workspace (overrides config and auto-detect)",
     )
     parser.add_argument(
+        "--message",
+        "-m",
+        default=None,
+        help="User utterance; auto-select teach mode via routing v1",
+    )
+    parser.add_argument(
         "--mode",
         choices=("mentor", "debug", "concept"),
-        default=default_mode,
-        help=f"Teaching mode prompt pack (default: {default_mode})",
+        default=None,
+        help=f"Teaching mode prompt pack (default: {default_mode}, or routed)",
     )
     parser.add_argument(
         "--hint-level",
@@ -57,6 +68,16 @@ def build_parser() -> argparse.ArgumentParser:
         "--binding-only",
         action="store_true",
         help="Print binding metadata only, not the full preamble",
+    )
+    parser.add_argument(
+        "--route-only",
+        action="store_true",
+        help="Print routing summary only (requires --message)",
+    )
+    parser.add_argument(
+        "--no-routing-log",
+        action="store_true",
+        help="Do not append routing decision to routing.jsonl",
     )
     return parser
 
@@ -81,10 +102,31 @@ def main(argv: list[str] | None = None) -> int:
         print(f"curated_context: {'yes' if binding.curated_context else 'no'}")
         return 0
 
+    routing_decision = None
+    mode = args.mode
+    if args.message:
+        routing_decision = route(args.message, binding=binding)
+        if mode is None:
+            mode = routing_decision.mode
+        if not args.no_routing_log:
+            log_routing_decision(
+                routing_decision,
+                utterance=args.message,
+                repo_root=repo_root,
+                binding=binding,
+            )
+        if args.route_only:
+            print(format_routing_summary(routing_decision))
+            return 0
+
+    if mode is None:
+        mode, _ = default_mode_and_hint(repo_root)
+
     preamble = assemble_preamble(
         binding,
-        mode=args.mode,
+        mode=mode,
         hint_level=args.hint_level,
+        routing=routing_decision,
     )
     sys.stdout.write(preamble.text)
     return 0

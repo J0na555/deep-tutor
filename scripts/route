@@ -1,0 +1,110 @@
+#!/usr/bin/env python3
+"""Classify an utterance and print teach-mode routing (Routing v1)."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from orchestrator.bind import bind_context, repo_root_from_module  # noqa: E402
+from orchestrator.routing import (  # noqa: E402
+    format_routing_summary,
+    log_routing_decision,
+    route,
+)
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description="Route a user message to mentor / debug / concept teach mode.",
+    )
+    parser.add_argument(
+        "message",
+        nargs="?",
+        default=None,
+        help="User utterance to classify (or use --message)",
+    )
+    parser.add_argument(
+        "--message",
+        "-m",
+        dest="message_flag",
+        default=None,
+        help="User utterance (alternative to positional)",
+    )
+    parser.add_argument(
+        "--cwd",
+        type=Path,
+        default=None,
+        help="Directory for context binding metadata in logs",
+    )
+    parser.add_argument(
+        "--domain",
+        metavar="KEY",
+        default=None,
+        help="Override domain key for log metadata",
+    )
+    parser.add_argument(
+        "--leveling-root",
+        metavar="PATH",
+        default=None,
+        help="Path to leveling workspace",
+    )
+    parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Emit machine-readable routing decision",
+    )
+    parser.add_argument(
+        "--no-log",
+        action="store_true",
+        help="Skip appending to routing.jsonl",
+    )
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)
+    utterance = args.message_flag or args.message
+    if not utterance or not utterance.strip():
+        print("route: provide a message (positional or --message)", file=sys.stderr)
+        return 2
+
+    repo_root = repo_root_from_module()
+    binding = bind_context(
+        repo_root=repo_root,
+        cwd=args.cwd,
+        domain_flag=args.domain,
+        leveling_root_override=args.leveling_root,
+    )
+    decision = route(utterance, binding=binding)
+
+    if not args.no_log:
+        log_routing_decision(
+            decision,
+            utterance=utterance,
+            repo_root=repo_root,
+            binding=binding,
+        )
+
+    if args.json:
+        payload = decision.to_dict()
+        payload["binding"] = {
+            "domain": binding.domain,
+            "project": binding.project,
+            "domain_source": binding.domain_source,
+        }
+        print(json.dumps(payload, indent=2))
+    else:
+        print(format_routing_summary(decision))
+        print(f"prompt_pack: prompts/modes/{decision.mode}.md")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

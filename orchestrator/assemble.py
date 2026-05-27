@@ -9,6 +9,7 @@ from pathlib import Path
 
 from memory.store import format_memory_slice, open_store
 from orchestrator.bind import Binding, load_config
+from orchestrator.routing import RoutingDecision, format_routing_summary
 
 
 VALID_MODES = ("mentor", "debug", "concept")
@@ -67,6 +68,7 @@ def assemble_preamble(
     *,
     mode: str = "mentor",
     hint_level: int = 2,
+    routing: RoutingDecision | None = None,
 ) -> Preamble:
     if mode not in VALID_MODES:
         raise ValueError(f"Unknown mode {mode!r}; expected one of {VALID_MODES}")
@@ -109,10 +111,16 @@ def assemble_preamble(
         f"project: {project_display}",
         f"mode: {mode}",
         f"hint_level: {hint_level}",
+    ]
+    if routing is not None:
+        header_lines.append(f"routing: {format_routing_summary(routing)}")
+    header_lines.extend(
+        [
         f"sources: {' + '.join(sources)}",
         "=====================================",
         "",
-    ]
+        ]
+    )
 
     sections = [
         _read(base_path),
