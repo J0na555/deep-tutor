@@ -545,4 +545,4 @@ Documentation exists to improve **reasoning** and **shipping discipline**, not a
 - **Values:** [Philosophy](../philosophy.md).  
 - **Entrypoint:** [README](../README.md).  
 - **Workflows:** [Usage model](USAGE_MODEL.md).  
-- **Topic stubs:** `docs/agents.md`, `docs/architecture.md`, `docs/memory.md`, `docs/evaluation.md`, `docs/roadmap.md`, `docs/prompts.md`, `docs/VISION.md` point here to reduce drift.
+- **Topic stubs:** `docs/agents.md`, `docs/architecture.md`, `docs/memory.md`, `docs/evaluation.md`, `docs/roadmap.md`, `docs/prompts.md`, `docs/hint-policy.md`, `docs/VISION.md` point here to reduce drift.
