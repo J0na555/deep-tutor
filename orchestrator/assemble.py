@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
+from memory.store import format_memory_slice, open_store
 from orchestrator.bind import Binding, load_config
 
 
@@ -127,6 +128,14 @@ def assemble_preamble(
             + binding.curated_context
         )
         sources.append("leveling curated context")
+
+    config = load_config(repo_root)
+    store = open_store(repo_root, config)
+    memory_slice = store.read_slice(domain=binding.domain, project=binding.project)
+    memory_text = format_memory_slice(memory_slice, db_path=store.db_path)
+    if memory_text:
+        sections.append(memory_text)
+        sources.append("memory slice")
 
     body = "\n\n---\n\n".join(sections)
     text = "\n".join(header_lines) + body + "\n"

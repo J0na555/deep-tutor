@@ -24,6 +24,6 @@ Prompt packs are **inspectable instruction blocks** the orchestrator assembles f
 2. Selected mode pack (`modes/<mode>.md`)
 3. Domain rule bundle (`domains/<key>/rules.md`)
 4. Hint ceiling block ([hint-levels.md](hint-levels.md) for the current level)
-5. Optional memory snippets (orchestrator; not in this directory yet)
+5. Optional memory slice ([memory/](../memory/) via orchestrator)
 
 Paste or include the concatenated result in your OpenCode agent configuration, or use a preamble script when available.

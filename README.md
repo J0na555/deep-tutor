@@ -18,7 +18,7 @@ Deep Tutor is a **local developer intelligence layer**: orchestration, prompts, 
 
 ## Two environments (critical)
 
-1. **Deep Tutor project** — **This repository.** Prompt packs, orchestrator logic (target), memory (target), domain configs, scripts, experiments about pedagogy. It is primarily a **context and learning orchestration system**, not a backend monolith.
+1. **Deep Tutor project** — **This repository.** Prompt packs, orchestrator logic, **lightweight memory** (`memory/`), domain configs, scripts, experiments about pedagogy. It is primarily a **context and learning orchestration system**, not a backend monolith.
 
 2. **Leveling environment** — **Separate workspace** (e.g. sibling repo `leveling-arc/`): `domains/`, `projects/`, `notes/`, `reflections/`, `devlogs/`, `experiments/`. That is where **skill progression and reflection** live. Deep Tutor **operates inside** that layout via folder context and conventions—not inside a bespoke Deep Tutor UI.
 
@@ -54,7 +54,7 @@ deep-tutor/
 └── README.md
 ```
 
-Today this repo is mostly **documentation**; runtime pieces are described as **target** behavior in the system design.
+Today this repo is mostly **documentation** plus a **minimal orchestrator and memory skeleton**; deeper routing and OpenCode integration remain **target** behavior in the system design.
 
 ---
 

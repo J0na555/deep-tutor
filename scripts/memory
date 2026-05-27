@@ -1,0 +1,164 @@
+#!/usr/bin/env python3
+"""Read and update Deep Tutor learning memory."""
+
+from __future__ import annotations
+
+import argparse
+import sys
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from memory.store import format_memory_slice, open_store  # noqa: E402
+from orchestrator.bind import bind_context, load_config, repo_root_from_module  # noqa: E402
+
+
+def build_parser() -> argparse.ArgumentParser:
+    common = argparse.ArgumentParser(add_help=False)
+    common.add_argument(
+        "--cwd",
+        type=Path,
+        default=None,
+        help="Directory to bind for domain/project keys (default: process cwd)",
+    )
+    common.add_argument(
+        "--domain",
+        metavar="KEY",
+        default=None,
+        help="Override domain key (required for writes when cwd is unbound)",
+    )
+    common.add_argument(
+        "--project",
+        metavar="KEY",
+        default=None,
+        help="Scope records to a project key",
+    )
+    common.add_argument(
+        "--leveling-root",
+        metavar="PATH",
+        default=None,
+        help="Path to leveling workspace (for binding only)",
+    )
+    common.add_argument(
+        "--notes",
+        default=None,
+        help="Optional notes (weak, mistake, solved)",
+    )
+    common.add_argument(
+        "--session",
+        metavar="ID",
+        default=None,
+        help="Optional session id (frustration)",
+    )
+
+    parser = argparse.ArgumentParser(
+        description="Inspect or update Deep Tutor learning memory (SQLite).",
+    )
+    sub = parser.add_subparsers(dest="command", required=True)
+
+    sub.add_parser("show", parents=[common], help="Print memory slice for bound domain/project")
+
+    mistake = sub.add_parser(
+        "mistake",
+        parents=[common],
+        help="Record or increment a mistake fingerprint",
+    )
+    mistake.add_argument("fingerprint", help="Short stable label for the error pattern")
+
+    weak = sub.add_parser("weak", parents=[common], help="Mark or refresh a weak concept")
+    weak.add_argument("concept", help="Concept label")
+
+    solved = sub.add_parser("solved", parents=[common], help="Mark a topic as solved")
+    solved.add_argument("topic", help="Topic label")
+
+    frustration = sub.add_parser("frustration", parents=[common], help="Append a frustration cue")
+    frustration.add_argument("cue", help="Short description of struggle signal")
+
+    return parser
+
+
+def resolve_scope(args: argparse.Namespace, repo_root: Path) -> tuple[str, str | None]:
+    if args.domain:
+        return args.domain, args.project
+
+    binding = bind_context(
+        repo_root=repo_root,
+        cwd=args.cwd,
+        domain_flag=None,
+        leveling_root_override=args.leveling_root,
+    )
+    if binding.domain == "generic" and not args.project:
+        raise SystemExit(
+            "Cannot infer domain from cwd; pass --domain KEY or run from a leveling path."
+        )
+    project = args.project if args.project is not None else binding.project
+    return binding.domain, project
+
+
+def cmd_show(args: argparse.Namespace, repo_root: Path) -> int:
+    domain, project = resolve_scope(args, repo_root)
+    store = open_store(repo_root, load_config(repo_root))
+    slice_ = store.read_slice(domain=domain, project=project)
+    text = format_memory_slice(slice_, db_path=store.db_path)
+    if text:
+        print(text)
+    else:
+        print(f"No memory records for domain={domain!r}, project={project!r}.")
+        print(f"Store: {store.db_path}")
+    return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)
+    repo_root = repo_root_from_module()
+    store = open_store(repo_root, load_config(repo_root))
+
+    if args.command == "show":
+        return cmd_show(args, repo_root)
+
+    domain, project = resolve_scope(args, repo_root)
+    if domain == "generic":
+        raise SystemExit("Writes require an explicit --domain KEY.")
+
+    if args.command == "mistake":
+        count = store.record_mistake(
+            args.fingerprint,
+            domain=domain,
+            project=project,
+            notes=args.notes,
+        )
+        print(f"Recorded mistake {args.fingerprint!r} (count={count}, domain={domain}).")
+    elif args.command == "weak":
+        store.add_weak_concept(
+            args.concept,
+            domain=domain,
+            project=project,
+            notes=args.notes,
+        )
+        print(f"Recorded weak concept {args.concept!r} (domain={domain}).")
+    elif args.command == "solved":
+        store.mark_solved(
+            args.topic,
+            domain=domain,
+            project=project,
+            notes=args.notes,
+        )
+        print(f"Marked topic {args.topic!r} as solved (domain={domain}).")
+    elif args.command == "frustration":
+        store.record_frustration(
+            args.cue,
+            domain=domain,
+            project=project,
+            session_id=args.session,
+        )
+        print(f"Recorded frustration cue (domain={domain}).")
+    else:
+        raise SystemExit(f"Unknown command {args.command!r}")
+
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

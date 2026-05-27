@@ -1,5 +1,6 @@
 {
   "leveling_root": null,
+  "memory_db": null,
   "default_mode": "mentor",
   "default_hint_level": 2
 }

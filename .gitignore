@@ -1,0 +1,4 @@
+memory/data/*.sqlite
+memory/data/*.sqlite-journal
+memory/data/*.sqlite-wal
+memory/data/*.sqlite-shm
