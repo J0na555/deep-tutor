@@ -56,6 +56,8 @@ deep-tutor/
 
 Today this repo is mostly **documentation** plus a **minimal orchestrator and memory skeleton**; deeper routing and OpenCode integration remain **target** behavior in the system design.
 
+**DSA pilot (Workflow A):** sibling `leveling-arc/domains/dsa/` with `CONTEXT.md` — run `./scripts/pilot-dsa` to verify binding and preamble assembly; see [experiments/pilot-dsa](experiments/pilot-dsa/README.md).
+
 ---
 
 ## Culture
