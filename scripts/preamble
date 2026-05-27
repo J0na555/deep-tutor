@@ -11,8 +11,11 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+import json
+
 from orchestrator.assemble import assemble_preamble, default_mode_and_hint  # noqa: E402
 from orchestrator.bind import bind_context, repo_root_from_module  # noqa: E402
+from orchestrator.opencode import build_opencode_context  # noqa: E402
 from orchestrator.routing import (  # noqa: E402
     format_routing_summary,
     log_routing_decision,
@@ -79,6 +82,11 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Do not append routing decision to routing.jsonl",
     )
+    parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Emit machine-readable JSON (same payload as opencode-hook)",
+    )
     return parser
 
 
@@ -104,7 +112,7 @@ def main(argv: list[str] | None = None) -> int:
 
     routing_decision = None
     mode = args.mode
-    if args.message:
+    if args.message and not args.json:
         routing_decision = route(args.message, binding=binding)
         if mode is None:
             mode = routing_decision.mode
@@ -118,6 +126,21 @@ def main(argv: list[str] | None = None) -> int:
         if args.route_only:
             print(format_routing_summary(routing_decision))
             return 0
+
+    if args.json:
+        payload = build_opencode_context(
+            repo_root,
+            cwd=binding.cwd,
+            message=args.message,
+            domain=args.domain,
+            leveling_root=args.leveling_root,
+            mode=mode,
+            hint_level=args.hint_level,
+            log_routing=bool(args.message) and not args.no_routing_log,
+        )
+        json.dump(payload, sys.stdout, indent=2)
+        sys.stdout.write("\n")
+        return 0
 
     if mode is None:
         mode, _ = default_mode_and_hint(repo_root)

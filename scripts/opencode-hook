@@ -1,0 +1,113 @@
+#!/usr/bin/env python3
+"""Machine interface for OpenCode plugin — emit preamble JSON on stdout."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import sys
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from orchestrator.opencode import build_opencode_context, resolve_deep_tutor_root  # noqa: E402
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description="Build Deep Tutor preamble JSON for OpenCode injection.",
+    )
+    parser.add_argument(
+        "--cwd",
+        type=Path,
+        required=True,
+        help="OpenCode working directory to bind",
+    )
+    parser.add_argument(
+        "--message",
+        "-m",
+        default=None,
+        help="Latest user utterance (overrides DEEP_TUTOR_MESSAGE env)",
+    )
+    parser.add_argument(
+        "--domain",
+        metavar="KEY",
+        default=None,
+        help="Override domain key",
+    )
+    parser.add_argument(
+        "--leveling-root",
+        metavar="PATH",
+        default=None,
+        help="Path to leveling workspace",
+    )
+    parser.add_argument(
+        "--mode",
+        choices=("mentor", "debug", "concept"),
+        default=None,
+        help="Force teach mode (skip routing unless message also given for logging)",
+    )
+    parser.add_argument(
+        "--hint-level",
+        type=int,
+        choices=range(1, 6),
+        default=None,
+        metavar="N",
+        help="Hint ceiling 1–5",
+    )
+    parser.add_argument(
+        "--no-routing-log",
+        action="store_true",
+        help="Do not append routing decision to routing.jsonl",
+    )
+    parser.add_argument(
+        "--deep-tutor-root",
+        metavar="PATH",
+        default=None,
+        help="Deep Tutor repo path (overrides auto-detect)",
+    )
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)
+    repo_root = resolve_deep_tutor_root(args.cwd, explicit=args.deep_tutor_root)
+    if repo_root is None:
+        print(
+            "opencode-hook: deep-tutor root not found "
+            "(set DEEP_TUTOR_ROOT or run from a linked workspace)",
+            file=sys.stderr,
+        )
+        return 2
+
+    message = args.message
+    if message is None:
+        env_message = os.environ.get("DEEP_TUTOR_MESSAGE")
+        if env_message:
+            message = env_message
+
+    try:
+        payload = build_opencode_context(
+            repo_root,
+            cwd=args.cwd.expanduser().resolve(),
+            message=message,
+            domain=args.domain,
+            leveling_root=args.leveling_root,
+            mode=args.mode,
+            hint_level=args.hint_level,
+            log_routing=not args.no_routing_log,
+        )
+    except (FileNotFoundError, ValueError) as exc:
+        print(f"opencode-hook: {exc}", file=sys.stderr)
+        return 1
+
+    json.dump(payload, sys.stdout, indent=2)
+    sys.stdout.write("\n")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

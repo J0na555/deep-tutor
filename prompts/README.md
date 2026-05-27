@@ -26,4 +26,4 @@ Prompt packs are **inspectable instruction blocks** the orchestrator assembles f
 4. Hint ceiling block ([hint-levels.md](hint-levels.md) for the current level)
 5. Optional memory slice ([memory/](../memory/) via orchestrator)
 
-Paste or include the concatenated result in your OpenCode agent configuration, or use a preamble script when available.
+Paste or include the concatenated result in your OpenCode agent configuration, or use `./scripts/preamble` / the OpenCode plugin ([integration/opencode](../integration/opencode/README.md)).

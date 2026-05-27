@@ -7,4 +7,6 @@ The roadmap is **MVP-first** and **anti-overengineering**: ship a small loop tha
 
 **Concrete workflows:** [Usage model](USAGE_MODEL.md)
 
+**OpenCode wiring:** [integration/opencode](../integration/opencode/README.md)
+
 **Canonical blueprint:** [System design](system-design.md)

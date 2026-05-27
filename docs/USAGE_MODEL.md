@@ -28,7 +28,7 @@ Deep Tutor’s **usage model** is **terminal-native**: you keep working in **Ope
 
 1. `cd ~/work/leveling-arc/domains/dsa`  
 2. Launch OpenCode from this cwd.  
-3. (**Target**) Run or paste Deep Tutor’s **domain preamble** for `dsa`—rules such as: brute-force baseline encouraged before polish; ask for complexity; avoid dumping full solutions at low hint levels.  
+3. Run Deep Tutor’s **domain preamble** for `dsa` automatically (OpenCode plugin) or via `./scripts/preamble` — rules such as: brute-force baseline encouraged before polish; ask for complexity; avoid dumping full solutions at low hint levels.  
 4. Ask your question as you naturally would in OpenCode; the **composed instructions** bias the model toward mentor/debug/concept behaviors per orchestrator policy—not a separate UI.
 
 **Success signal:** you spend more turns on **invariants and complexity** than on copying a final program.
@@ -47,7 +47,7 @@ Deep Tutor’s **usage model** is **terminal-native**: you keep working in **Ope
 **Session:**
 
 1. cwd under `domains/system-design/`.  
-2. (**Target**) Inject Deep Tutor rules emphasizing **tradeoffs**, **failure modes**, and **comparison** rather than single “correct” architectures.  
+2. Inject Deep Tutor rules (OpenCode plugin or `./scripts/preamble`) emphasizing **tradeoffs**, **failure modes**, and **comparison** rather than single “correct” architectures.  
 3. Use OpenCode to sketch diagrams in markdown or to critique your own bullets—the agent loop stays OpenCode; the **stance** comes from Deep Tutor prompts.
 
 **Success signal:** answers routinely expose **constraints** (“under high partition risk…” / “if your SLA is …”) instead of cookie-cutter blueprints.
@@ -67,7 +67,7 @@ Deep Tutor’s **usage model** is **terminal-native**: you keep working in **Ope
 
 1. Reproduce the bug or failed test **before** leaning on hints—matches Debug-oriented teaching behavior.  
 2. Paste traceback + minimal snippet through OpenCode as you already would.  
-3. (**Target**) Orchestrator selects **debug-heavy** prompt structure; memory surfaces prior related mistakes (“third `NoneType` this month”) without preempting your hypothesis.
+3. Orchestrator selects **debug-heavy** prompt structure (via routing v1 when using the OpenCode plugin); memory surfaces prior related mistakes (“third `NoneType` this month”) without preempting your hypothesis.
 
 **Success signal:** faster **narrowing** (what variable at crash?) rather than faster **paste of a patch you don’t understand**.
 
@@ -79,7 +79,7 @@ Deep Tutor’s **usage model** is **terminal-native**: you keep working in **Ope
 
 **Practice:**
 
-- (**Target**) Support flags or env vars understood by your orchestrator script: e.g. “treat as `dsa` even though cwd is `notes/`.”  
+- Use flags or env vars understood by the orchestrator: e.g. `--domain dsa` on `./scripts/preamble`, or `DEEP_TUTOR_LEVELING_ROOT` when cwd is ambiguous.  
 - Document your personal convention in **`leveling-arc/README.md`** so future-you does not rely on memory.
 
 ---
